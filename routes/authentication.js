@@ -4,14 +4,18 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-Signup Route
-router.post('signup', { session: false }), async (req, res, next) => {
+//Signup Route\
+
+router.post(
+    '/signup',
+    passport.authenticate('signup', { session: false }), async (req, res, next) => {
         res.json({
             message: 'Signup successful',
             user: req.user
         });
     }
 );
+
 
 //('/signup', (req, res, next) => {
 //   passport.authenticate('signup', async (err, user, info) => {
