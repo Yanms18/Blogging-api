@@ -1,4 +1,4 @@
-import Blog from '../models/blogModel';
+import Blog from '../models/Blog.js';
 import calculateReadingTime from '../utils/calculateReadingTime';
 
 // Create a new blog post

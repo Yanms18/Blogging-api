@@ -7,12 +7,12 @@ import {
   deleteBlog,
   getUserBlogs
 } from '../controller/blogController.js';
-import { authenticateJWT } from '../middleware/authMiddleware.js';
+import passport from '../Auth/auth.js';
 
 const router = express.Router();
 
 // Endpoint to create a new blog post (requires authentication)
-router.post('/', authenticateJWT, createBlog);
+router.post('/', passport.authenticate('jwt', { session: false }), createBlog);
 
 // Endpoint to get a list of published blogs (accessible by everyone)
 router.get('/', getPublishedBlogs);
@@ -21,12 +21,12 @@ router.get('/', getPublishedBlogs);
 router.get('/:id', getBlogById);
 
 // Endpoint to update a blog post (requires authentication)
-router.put('/:id', authenticateJWT, updateBlog);
+router.put('/:id', passport.authenticate('jwt', { session: false }), updateBlog);
 
 // Endpoint to delete a blog post (requires authentication)
-router.delete('/:id', authenticateJWT, deleteBlog);
+router.delete('/:id', passport.authenticate('jwt', { session: false }), deleteBlog);
 
 // Endpoint to get a list of blogs created by the logged-in user (requires authentication)
-router.get('/user/blogs', authenticateJWT, getUserBlogs);
+router.get('/user/blogs', passport.authenticate('jwt', { session: false }), getUserBlogs);
 
 export default router;
