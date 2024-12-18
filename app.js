@@ -17,3 +17,7 @@ app.use('/api/blogs', blogRoutes);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+// npm init -y
+// npm pkg set type="module"
