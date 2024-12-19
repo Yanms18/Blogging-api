@@ -1,5 +1,5 @@
 import Blog from '../models/Blog.js';
-import calculateReadingTime from '../utils/calculateReadingTime';
+import calculateReadingTime from '../utils/calculateReadingTime.js';
 
 // Create a new blog post
 export const createBlog = async (req, res) => {

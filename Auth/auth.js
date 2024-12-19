@@ -3,6 +3,26 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import express from 'express';
+import connectDB from './database/db.js';
+import userRoutes from './routes/userRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import authRoutes from './routes/authentication.js'; // Import authentication routes
+
+dotenv.config();
+connectDB();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use('/api/users', userRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/auth', authRoutes); // Register authentication routes
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 
 // JWT Strategy
 const jwtOptions = {
@@ -38,27 +58,27 @@ passport.use('signup', new LocalStrategy({
     const hashedPassword = await bcrypt.hash(password, salt);
 
     
-UserSchema.pre(
-    'save',
-    async function (next) {
-        const user = this;
-        const hash = await bcrypt.hash(this.password, 10);
+// UserSchema.pre(
+//     'save',
+//     async function (next) {
+//         const user = this;
+//         const hash = await bcrypt.hash(this.password, 10);
 
-        this.password = hash;
-        next();
-    }
-);
+//         this.password = hash;
+//         next();
+//     }
+// );
 
-// You will also need to make sure that the user trying to log in has the correct credentials. Add the following new method:
-UserSchema.methods.isValidPassword = async function(password) {
-    const user = this;
-    const compare = await bcrypt.compare(password, user.password);
+// // You will also need to make sure that the user trying to log in has the correct credentials. Add the following new method:
+// UserSchema.methods.isValidPassword = async function(password) {
+//     const user = this;
+//     const compare = await bcrypt.compare(password, user.password);
   
-    return compare;
-  }
+//     return compare;
+//   }
 
 
-const UserModel = mongoose.model('users', UserSchema);
+// const UserModel = mongoose.model('users', UserSchema);
 
 
 
