@@ -1,7 +1,7 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
 // Schema for creating a blog
-export const createBlogSchema = Joi.object({
+const createBlogSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
   tags: Joi.array().items(Joi.string()).optional(),
@@ -10,10 +10,15 @@ export const createBlogSchema = Joi.object({
 });
 
 // Schema for updating a blog
-export const updateBlogSchema = Joi.object({
+const updateBlogSchema = Joi.object({
   newTitle: Joi.string().optional(),
   description: Joi.string().optional(),
   tags: Joi.array().items(Joi.string()).optional(),
   body: Joi.string().optional(),
   state: Joi.string().valid('draft', 'published').optional()
 });
+
+module.exports = {
+  createBlogSchema,
+  updateBlogSchema
+};

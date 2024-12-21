@@ -1,9 +1,9 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './database/db.js';
-import userRoutes from './routes/userRoutes.js';
-import blogRoutes from './routes/blogRoutes.js';
-import authRoutes from './routes/authentication.js'; // Import authentication routes
+const express = require('express');
+const dotenv = require('dotenv');
+const connectDB = require('./database/db');
+const userRoutes = require('./routes/userRoutes');
+const blogRoutes = require('./routes/blogRoutes');
+const authRoutes = require('./routes/authentication');
 
 dotenv.config();
 connectDB();
@@ -25,8 +25,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-export default app; // Export the Express app
-
-
-// npm init -y
-// npm pkg set type="module"
+module.exports = app;

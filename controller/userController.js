@@ -1,7 +1,7 @@
-import User from '../models/User.js';
+const User = require('../models/User');
 
 // Get user details
-export const getUser = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
     if (!user) {
@@ -14,7 +14,7 @@ export const getUser = async (req, res) => {
 };
 
 // Create a new user
-export const createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -37,7 +37,7 @@ export const createUser = async (req, res) => {
 };
 
 // Update user details
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { first_name, last_name, email, password } = req.body;
@@ -61,7 +61,7 @@ export const updateUser = async (req, res) => {
 };
 
 // Delete a user
-export const deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -72,9 +72,15 @@ export const deleteUser = async (req, res) => {
     }
 
     await User.deleteOne({ _id: id });
-
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ error });
   }
+};
+
+module.exports = {
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser
 };

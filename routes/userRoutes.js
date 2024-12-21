@@ -1,6 +1,6 @@
-import express from 'express';
-import { getUser, createUser, updateUser, deleteUser } from '../controller/userController.js';
-import passport from '../Auth/auth.js';
+const express = require('express');
+const { getUser, createUser, updateUser, deleteUser } = require('../controller/userController');
+const passport = require('../Auth/auth');
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), updateUser)
 // Endpoint to delete a user (requires authentication)
 router.delete('/:id', passport.authenticate('jwt', { session: false }), deleteUser);
 
-export default router;
+module.exports = router;

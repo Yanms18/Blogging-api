@@ -1,5 +1,5 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   createBlog,
   getPublishedBlogs,
   getBlogByTitle,
@@ -7,8 +7,8 @@ import {
   updateBlogByTitle,
   deleteBlog,
   getUserBlogs
-} from '../controller/blogController.js';
-import passport from '../Auth/auth.js';
+} = require('../controller/blogController');
+const passport = require('../Auth/auth');
 
 const router = express.Router();
 
@@ -33,4 +33,4 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), deleteBl
 // Endpoint to get a list of blogs created by the logged-in user (requires authentication)
 router.get('/user/blogs', passport.authenticate('jwt', { session: false }), getUserBlogs);
 
-export default router;
+module.exports = router;

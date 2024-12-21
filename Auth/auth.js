@@ -1,11 +1,12 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
-import User from '../models/User.js';
-import bcrypt from 'bcryptjs';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken'; // Ensure jwt is imported
-import connectDB from '../database/db.js'; // Corrected import path
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const JWTStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken'); // Ensure jwt is imported
+const connectDB = require('../database/db'); // Corrected import path
 
 dotenv.config();
 connectDB();
@@ -61,10 +62,11 @@ passport.use('signup', new LocalStrategy({
 // Login Strategy
 passport.use('login', new LocalStrategy({
   usernameField: 'email',
-  passwordField: 'password'
-}, async (email, password, done) => {
+  passwordField: 'password',
+  passReqToCallback: true
+}, async (req, email, password, done) => {
   try {
-    // Find user by email
+    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return done(null, false, { message: 'User not found' });
@@ -76,19 +78,10 @@ passport.use('login', new LocalStrategy({
       return done(null, false, { message: 'Incorrect password' });
     }
 
-    return done(null, user, { message: 'Logged in successfully' });
+    return done(null, user);
   } catch (error) {
     return done(error);
   }
 }));
 
-// Add method to generate JWT token
-export const generateToken = (user) => {
-  return jwt.sign(
-    { id: user._id }, 
-    process.env.JWT_SECRET, 
-    { expiresIn: '1h' }
-  );
-};
-
-export default passport;
+module.exports = passport;

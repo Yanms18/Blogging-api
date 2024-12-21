@@ -6,4 +6,4 @@ const calculateReadingTime = (text) => {
   return readTime;
 };
 
-export default calculateReadingTime;
+module.exports = calculateReadingTime;

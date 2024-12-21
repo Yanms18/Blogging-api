@@ -1,9 +1,9 @@
-import Blog from '../models/Blog.js';
-import calculateReadingTime from '../utils/calculateReadingTime.js';
-import { createBlogSchema, updateBlogSchema } from '../Middleware/validator.js';
+const Blog = require('../models/Blog');
+const calculateReadingTime = require('../utils/calculateReadingTime');
+const { createBlogSchema, updateBlogSchema } = require('../Middleware/validator');
 
 // Create a new blog post
-export const createBlog = async (req, res) => {
+const createBlog = async (req, res) => {
   const { title, description, tags, body } = req.body;
   const { _id: userId } = req.user;
 
@@ -44,7 +44,7 @@ export const createBlog = async (req, res) => {
 };
 
 // Get a list of published blogs (accessible by both logged in and not logged in users)
-export const getPublishedBlogs = async (req, res) => {
+const getPublishedBlogs = async (req, res) => {
   try {
     const { page = 1, limit = 20, search, sortBy } = req.query;
     const query = { state: 'published' };
@@ -78,7 +78,7 @@ export const getPublishedBlogs = async (req, res) => {
 };
 
 // Get a single published blog by title
-export const getBlogByTitle = async (req, res) => {
+const getBlogByTitle = async (req, res) => {
   try {
     const blog = await Blog.findOne({ title: req.query.title }).populate('userId', 'first_name last_name email');
     
@@ -97,7 +97,7 @@ export const getBlogByTitle = async (req, res) => {
 };
 
 // Get a single blog by ID
-export const getBlogById = async (req, res) => {
+const getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id).populate('userId', 'first_name last_name email');
     
@@ -123,7 +123,7 @@ export const getBlogById = async (req, res) => {
 };
 
 // Update a blog post by title
-export const updateBlogByTitle = async (req, res) => {
+const updateBlogByTitle = async (req, res) => {
   try {
     const { title } = req.params;
     const { newTitle, description, tags, body, state } = req.body;
@@ -173,7 +173,7 @@ export const updateBlogByTitle = async (req, res) => {
 };
 
 // Delete a blog post
-export const deleteBlog = async (req, res) => {
+const deleteBlog = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -192,10 +192,9 @@ export const deleteBlog = async (req, res) => {
 };
 
 // Get a list of blogs for the logged-in user
-export const getUserBlogs = async (req, res) => {
+const getUserBlogs = async (req, res) => {
   try {
     const { page = 1, limit = 20, state } = req.query;
-    
     const query = { userId: req.user._id };
     
     if (state) query.state = state;
@@ -208,4 +207,14 @@ export const getUserBlogs = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error });
   }
+};
+
+module.exports = {
+  createBlog,
+  getPublishedBlogs,
+  getBlogByTitle,
+  getBlogById,
+  updateBlogByTitle,
+  deleteBlog,
+  getUserBlogs
 };
