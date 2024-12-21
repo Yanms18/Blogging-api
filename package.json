@@ -22,7 +22,7 @@
     "express": "^4.17.1",
     "joi": "^17.4.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^6.0.12",
+    "mongoose": "^7.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"

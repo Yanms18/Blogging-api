@@ -6,7 +6,7 @@
   },
   "item": [
     {
-      "name": "Signup",
+      "name": "Sign Up",
       "request": {
         "method": "POST",
         "header": [
@@ -27,7 +27,7 @@
       }
     },
     {
-      "name": "Login",
+      "name": "Log In",
       "request": {
         "method": "POST",
         "header": [
@@ -66,9 +66,9 @@
           "raw": "{\n  \"title\": \"My First Blog\",\n  \"description\": \"This is a description of my first blog.\",\n  \"tags\": [\"tag1\", \"tag2\"],\n  \"body\": \"This is the body of my first blog. It contains detailed information about the topic.\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/blogs",
+          "raw": "{{baseUrl}}/api/blogs/create-post",
           "host": ["{{baseUrl}}"],
-          "path": ["api", "blogs"]
+          "path": ["api", "blogs", "create-post"]
         }
       },
       "event": [
@@ -78,6 +78,9 @@
             "exec": [
               "const jsonResponse = pm.response.json();",
               "pm.environment.set('blogId', jsonResponse.data._id);"
+              ,
+              "const encodedTitle = encodeURIComponent(jsonResponse.data.title);",
+              "pm.environment.set('title', encodedTitle);"
             ]
           }
         }
@@ -88,9 +91,54 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/blogs",
+          "raw": "{{baseUrl}}/api/blogs/all-posts",
           "host": ["{{baseUrl}}"],
-          "path": ["api", "blogs"]
+          "path": ["api", "blogs", "all-posts"]
+        }
+      }
+    },
+    {
+      "name": "Search Blogs",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/blogs/all-posts?search={{keyword}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "blogs", "all-posts"],
+          "query": [
+            {
+              "key": "search",
+              "value": "{{keyword}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Blog by Title",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/blogs/single-post?title={{title}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "blogs", "single-post"],
+          "query": [
+            {
+              "key": "title",
+              "value": "{{title}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Blog by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/blogs/{{blogId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "blogs", "{{blogId}}"]
         }
       }
     },
@@ -113,16 +161,22 @@
           "raw": "{\n  \"newTitle\": \"Updated Blog Title\",\n  \"description\": \"Updated description.\",\n  \"tags\": [\"tag1\", \"tag3\"],\n  \"body\": \"Updated body of the blog.\",\n  \"state\": \"published\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/blogs/title/title:",
+          "raw": "{{baseUrl}}/api/blogs/title/{{title}}",
           "host": ["{{baseUrl}}"],
-          "path": ["api", "blogs", "title", "My%20First%20Blog"]
+          "path": ["api", "blogs", "title", "{{title}}"]
         }
       }
     },
     {
-      "name": "Get Blog by ID",
+      "name": "Delete Blog",
       "request": {
-        "method": "GET",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
         "url": {
           "raw": "{{baseUrl}}/api/blogs/{{blogId}}",
           "host": ["{{baseUrl}}"],
@@ -144,40 +198,6 @@
           "raw": "{{baseUrl}}/api/blogs/user/blogs",
           "host": ["{{baseUrl}}"],
           "path": ["api", "blogs", "user", "blogs"]
-        }
-      }
-    },
-    {
-      "name": "Search Blogs",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/api/blogs/search?query=tag1",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "blogs", "search"],
-          "query": [
-            {
-              "key": "query",
-              "value": "tag1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Delete Blog",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{token}}"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/blogs/{{blogId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "blogs", "{{blogId}}"]
         }
       }
     }
