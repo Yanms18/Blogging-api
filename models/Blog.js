@@ -11,9 +11,13 @@ const blogSchema = new mongoose.Schema({
     type: String 
   },
   author: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
+    type: String,  
     required: true 
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   },
   state: { 
     type: String, 

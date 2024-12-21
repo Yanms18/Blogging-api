@@ -3,24 +3,26 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const connectToDb = () => {
-  const mongoUri = process.env.MONGO_URI;
-  if (!mongoUri) {
-    throw new Error('MONGO_URI is not defined in the environment variables');
-  }
+const connectToDb = async () => {
+  try {
+    const mongoUri = process.env.MONGO_URI;
+    if (!mongoUri) {
+      throw new Error('MONGO_URI is not defined in the environment variables');
+    }
 
-  mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+    // Set the strictQuery option to false to prepare for Mongoose 7
+    mongoose.set('strictQuery', false);
 
-  mongoose.connection.on('connected', () => {
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
     console.log('Connected to MongoDB successfully');
-  });
-
-  mongoose.connection.on('error', (err) => {
-    console.log('Error connecting to MongoDB', err);
-  });
+  } catch (error) {
+    console.error('Error connecting to MongoDB', error);
+    process.exit(1); // Exit the process with failure
+  }
 };
 
 export default connectToDb;

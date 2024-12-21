@@ -14,11 +14,18 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/blogs', blogRoutes);
-app.use('/api/auth', authRoutes); // Register authentication routes
+app.use('/api/auth', authRoutes);
+
+// Example route to test the server
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello from the server' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export default app; // Export the Express app
 
 
 // npm init -y

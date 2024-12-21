@@ -1,4 +1,8 @@
-Sure, here is a `README.md` file for your project:
+Sure! Here is an updated 
+
+README.md
+
+ file based on your codebase:
 
 ```markdown
 # Blogging API
@@ -37,6 +41,12 @@ database/
 db.js
 
 
+Middleware/
+    
+
+validator.js
+
+
 models/
     
 
@@ -53,6 +63,21 @@ User.js
 package.json
 
 
+
+
+postman_collection.json
+
+
+
+
+postman_environment.json
+
+
+
+
+README.md
+
+
 routes/
     
 
@@ -67,6 +92,11 @@ blogRoutes.js
     
 
 userRoutes.js
+
+
+
+
+test.js
 
 
 utils/
@@ -86,7 +116,7 @@ calculateReadingTime.js
 
 ### Installation
 
-1.  Clone the repository:
+1. Clone the repository:
 
    ```sh
    git clone https://github.com/yourusername/blogging-api.git
@@ -103,7 +133,7 @@ calculateReadingTime.js
 
    ```env
    PORT=3000
-   MONGO_URI=mongodb://localhost:27017/blogapi
+   MONGO_URI=your_mongo_uri
    JWT_SECRET=your_jwt_secret_key
    ```
 
@@ -113,7 +143,11 @@ calculateReadingTime.js
    npm start
    ```
 
-## API Endpoints
+## API End
+
+points
+
+
 
 ### Authentication
 
@@ -153,11 +187,7 @@ calculateReadingTime.js
 
 - **Get User Details**
 
- 
-
- ```
-
-http
+  ```http
   GET /api/users/:id
   ```
 
@@ -206,7 +236,7 @@ http
 - **Create Blog**
 
   ```http
-  POST /api/blogs
+  POST /api/blogs/create-post
   ```
 
   Request Body:
@@ -216,14 +246,20 @@ http
     "title": "My First Blog",
     "description": "This is a description of my first blog.",
     "tags": ["tag1", "tag2"],
-    "body": "This is the body of my first blog."
+    "body": "This is the body of my first blog. It contains detailed information about the topic."
   }
   ```
 
 - **Get Published Blogs**
 
   ```http
-  GET /api/blogs
+  GET /api/blogs/all-posts
+  ```
+
+- **Get Blog by Title**
+
+  ```http
+  GET /api/blogs/single-post?title=My%20First%20Blog
   ```
 
 - **Get Blog by ID**
@@ -235,14 +271,14 @@ http
 - **Update Blog**
 
   ```http
-  PUT /api/blogs/:id
+  PUT /api/blogs/title/:title
   ```
 
   Request Body:
 
   ```json
   {
-    "title": "Updated Blog Title",
+    "newTitle": "Updated Blog Title",
     "description": "Updated description.",
     "tags": ["tag1", "tag3"],
     "body": "Updated body of the blog.",
@@ -262,9 +298,23 @@ http
   GET /api/blogs/user/blogs
   ```
 
+- **Search Blogs**
+
+  ```http
+  GET /api/blogs/search?query=tag1
+  ```
+
+## Running Tests
+
+To run the tests, use the following command:
+
+```sh
+npm test
+```
+
 ## License
 
 This project is licensed under the MIT License.
 ```
 
-This `README.md` file provides an overview of the project, installation instructions, and details about the API endpoints. Adjust the content as needed to fit your specific project details.
+This `README.md` file provides an overview of the project, installation instructions, and details about the API endpoints based on your current codebase. Adjust the content as needed to fit your specific project details.This `README.md` file provides an overview of the project, installation instructions, and details about the API endpoints based on your current codebase. Adjust the content as needed to fit your specific project details.

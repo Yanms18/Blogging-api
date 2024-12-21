@@ -4,8 +4,8 @@ import passport from '../Auth/auth.js';
 
 const router = express.Router();
 
-// Endpoint to get user details (requires authentication)
-router.get('/:id', passport.authenticate('jwt', { session: false }), getUser);
+// Endpoint to get user details 
+router.get('/:id', getUser);
 
 // Endpoint to create a new user
 router.post('/', createUser);
