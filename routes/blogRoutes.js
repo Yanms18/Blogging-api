@@ -31,6 +31,6 @@ router.put('/title/:title', passport.authenticate('jwt', { session: false }), up
 router.delete('/:id', passport.authenticate('jwt', { session: false }), deleteBlog);
 
 // Endpoint to get a list of blogs created by the logged-in user (requires authentication)
-// router.get('/user/blogs', passport.authenticate('jwt', { session: false }), getUserBlogs);
+router.get('/user/blogs', passport.authenticate('jwt', { session: false }), getUserBlogs);
 
 export default router;
