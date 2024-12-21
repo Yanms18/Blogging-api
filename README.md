@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 Sure! Here is an updated 
 
 README.md
 
  file based on your codebase:
+=======
+>>>>>>> 34f02e9a0d6e721a574bb44f8d25985562569c98
 
 ```markdown
 # Blogging API
