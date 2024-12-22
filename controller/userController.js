@@ -29,8 +29,12 @@ const createUser = async (req, res) => {
       password
     });
 
-    await newUser.save();
-    res.status(201).json(newUser);
+    const result = await newUser.save();
+    res.status(201).json({
+			success: true,
+			message: 'Your account has been created successfully',
+			result,
+		});
   } catch (error) {
     res.status(500).json({ error });
   }

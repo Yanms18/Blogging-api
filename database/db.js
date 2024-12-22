@@ -10,7 +10,6 @@ const connectToDb = async () => {
       throw new Error('MONGO_URI is not defined in the environment variables');
     }
 
-    // Set the strictQuery option to false to prepare for Mongoose 7
     mongoose.set('strictQuery', false);
 
     await mongoose.connect(mongoUri, {
