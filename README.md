@@ -1,11 +1,10 @@
-<<<<<<< HEAD
+Collecting workspace information
+
 Sure! Here is an updated 
 
 README.md
 
- file based on your codebase:
-=======
->>>>>>> 34f02e9a0d6e721a574bb44f8d25985562569c98
+ file based on your codebase, including a section on how to use the test file:
 
 ```markdown
 # Blogging API
@@ -21,6 +20,11 @@ This is a Blogging API built with Node.js, Express, and MongoDB. It allows users
 app.js
 
 
+
+
+app.test.js
+
+
 Auth/
     
 
@@ -28,6 +32,11 @@ auth.js
 
 
 controller/
+    
+
+authcontroller.js
+
+
     
 
 blogController.js
@@ -97,11 +106,6 @@ blogRoutes.js
 userRoutes.js
 
 
-
-
-test.js
-
-
 utils/
     
 
@@ -132,7 +136,11 @@ calculateReadingTime.js
    npm install
    ```
 
-3. Create a `.env` file in the root directory and add the following environment variables:
+3. Create a 
+
+.env
+
+ file in the root directory and add the following environment variables:
 
    ```env
    PORT=3000
@@ -146,11 +154,7 @@ calculateReadingTime.js
    npm start
    ```
 
-## API End
-
-points
-
-
+## API Endpoints
 
 ### Authentication
 
@@ -171,10 +175,10 @@ points
   }
   ```
 
-- **Log In**
+- **Sign In**
 
   ```http
-  POST /api/auth/login
+  POST /api/auth/signin
   ```
 
   Request Body:
@@ -303,8 +307,19 @@ points
 
 - **Search Blogs**
 
+
+
   ```http
-  GET /api/blogs/search?query=tag1
+  GET /api/blogs/all-posts?search=keyword
+  ```
+keyword like author, Title and tags 
+
+- **Get Blogs Ordered by Read Count, Reading Time, and Timestamp**
+
+  ```http
+  GET /api/blogs/all-posts?sortBy=read_count
+  GET /api/blogs/all-posts?sortBy=reading_time
+  GET /api/blogs/all-posts?sortBy=createdAt
   ```
 
 ## Running Tests
@@ -315,9 +330,54 @@ To run the tests, use the following command:
 npm test
 ```
 
+### Test File Structure
+
+The 
+
+app.test.js
+
+ file contains comprehensive tests for the API endpoints. The tests include:
+
+- **Authentication Tests**
+  - Sign Up
+  - Sign In
+  - Error handling for incorrect password and non-existent user
+
+- **User Tests**
+  - Get user details
+  - Update user details
+  - Delete user
+
+- **Blog Tests**
+  - Create a new blog post
+  - Get a list of published blogs
+  - Get a specific blog by title
+  - Get a specific blog by ID
+  - Update a blog post by title
+  - Delete a blog post
+  - Get a list of blogs created by the logged-in user
+  - Get a list of blogs filtered by state
+  - Increment read_count by 1 when a single blog is requested
+  - Search blogs by author, title, and tags
+  - Get a list of blogs ordered by read_count, reading_time, and timestamp
+
+### Running Specific Tests
+
+To run a specific test or a group of tests, you can use the `-t` option followed by the name of the test or test suite. For example:
+
+```sh
+npm test -- -t "should successfully create a new user"
+```
+
+This command will run only the test with the specified name.
+
 ## License
 
 This project is licensed under the MIT License.
 ```
 
-This `README.md` file provides an overview of the project, installation instructions, and details about the API endpoints based on your current codebase. Adjust the content as needed to fit your specific project details.This `README.md` file provides an overview of the project, installation instructions, and details about the API endpoints based on your current codebase. Adjust the content as needed to fit your specific project details.
+This `README.md` file provides an overview of the project, installation instructions, details about the API endpoints, and instructions on how to run the tests. Adjust the content as needed to fit your specific project details.
+This `README.md` file provides an overview of the project, installation instructions, details about the API endpoints, and instructions on how to run the tests. Adjust the content as needed to fit your specific project details.
+
+
+

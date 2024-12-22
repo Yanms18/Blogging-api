@@ -5,8 +5,8 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
-const jwt = require('jsonwebtoken'); // Ensure jwt is imported
-const connectDB = require('../database/db'); // Corrected import path
+const jwt = require('jsonwebtoken'); 
+const connectDB = require('../database/db'); 
 
 dotenv.config();
 connectDB();
