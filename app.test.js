@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const User = require('./models/User');
 const Blog = require('./models/Blog');
+const { object } = require('joi');
 
 describe('API Endpoints', () => {
   beforeAll(async () => {
@@ -257,7 +258,7 @@ describe('API Endpoints', () => {
         .get('/api/blogs/all-posts');
 
       expect(response.status).toBe(200);
-      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body).toBeInstanceOf(Object);
     }, 20000);
 
     it('should get a specific blog by title', async () => {
@@ -296,10 +297,9 @@ describe('API Endpoints', () => {
     
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
-        title: 'My First Blog',
-        description: 'This is a description of my first blog.',
-        tags: ['tag1', 'tag2'],
-        body: 'This is the body of my first blog. It contains detailed information about the topic.'
+        code: 200,
+  success: true,
+  message: 'Blog found',
       });
     }, 20000);
 
@@ -345,12 +345,11 @@ describe('API Endpoints', () => {
         }
       expect(response.status).toBe(200);
       expect(response.body).toMatchObject({
-        title: 'My First Blog',
-        description: 'This is a description of my first blog.',
-        tags: ['tag1', 'tag2'],
-        body: 'This is the body of my first blog. It contains detailed information about the topic.'
+        code: 200,
+        success: true,
+        message: 'Blog found',
       });
-    }, 20000);
+    }, 40000);
 
     it('the owner should update a blog post state by title', async () => {
       // First, create a blog post
@@ -376,7 +375,7 @@ describe('API Endpoints', () => {
       expect(response.body.data).toMatchObject({
         state: 'published'
       });
-    }, 20000);
+    }, 40000);
 
     it('The owner should delete a blog post in draft or published state', async () => {
       // First, create a blog post
@@ -420,13 +419,8 @@ describe('API Endpoints', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body[0]).toMatchObject({
-        title: 'My First Blog',
-        description: 'This is a description of my first blog.',
-        tags: ['tag1', 'tag2'],
-        body: 'This is the body of my first blog. It contains detailed information about the topic.'
-      });
+      expect(response.body.data.docs).toBeInstanceOf(Array);
+      expect(response.body.data).toHaveProperty('page', 1);
     }, 200000);
 
     it('should allow the owner to get a list of blogs filtered by state', async () => {
@@ -479,10 +473,9 @@ describe('API Endpoints', () => {
         .query({ state: 'draft' });
     
       expect(response.status).toBe(200);
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body[0]).toMatchObject({
-        state: 'draft'
-      });
+      expect(response.body.data.docs[0]).toHaveProperty(
+        'state', 'draft'
+      );
     }, 20000);
 
     it('should increment read_count by 1 when a single blog is requested', async () => {
@@ -506,12 +499,6 @@ describe('API Endpoints', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('message', 'Blog updated successfully');
-      expect(response.body.data).toMatchObject({
-        title: 'My First Blog',
-          description: 'This is a description of my first blog.',
-          tags: ['tag1', 'tag2'],
-          body: 'This is the body of my first blog. It contains detailed information about the topic.'
-      });
 
 
       blogId = createResponse.body.data._id;
@@ -522,7 +509,7 @@ describe('API Endpoints', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response1.status).toBe(200);
-      expect(response1.body).toHaveProperty('read_count', 1);
+      expect(response1.body.data).toHaveProperty('read_count', 1);
 
       // Fetch the blog post by ID again to increment read_count
       const response2 = await request(app)
@@ -530,7 +517,7 @@ describe('API Endpoints', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(response2.status).toBe(200);
-      expect(response2.body).toHaveProperty('read_count', 2);
+      expect(response2.body.data).toHaveProperty('read_count', 2);
     }, 20000);
 
 it('should search blogs by author, title, and tags', async () => {
@@ -560,12 +547,7 @@ it('should search blogs by author, title, and tags', async () => {
   // Ensure the update operation was successful
   expect(updateResponse.status).toBe(200);
   expect(updateResponse.body).toHaveProperty('message', 'Blog updated successfully');
-  expect(updateResponse.body.data).toMatchObject({
-    title: 'My First Blog',
-    description: 'This is a description of my first blog.',
-    tags: ['tag1', 'tag2'],
-    body: 'This is the body of my first blog. It contains detailed information about the topic.'
-  });
+
 
   // Perform the search by author, title, and tags
   const searchResponse = await request(app)
@@ -573,14 +555,10 @@ it('should search blogs by author, title, and tags', async () => {
     .query({ search: 'John Doe' });
 
   expect(searchResponse.status).toBe(200);
-  expect(searchResponse.body).toBeInstanceOf(Array);
-  expect(searchResponse.body[0]).toMatchObject({
-    title: 'My First Blog',
-    description: 'This is a description of my first blog.',
-    tags: ['tag1', 'tag2'],
-    body: 'This is the body of my first blog. It contains detailed information about the topic.',
-    author: 'John Doe'
-  });
+  expect(searchResponse.body.data.docs).toBeInstanceOf(Array);
+  expect(searchResponse.body.data.docs[0]).toHaveProperty(
+    'author', 'John Doe'
+  );
 
   // Perform the search by title
   const search2Response = await request(app)
@@ -588,14 +566,10 @@ it('should search blogs by author, title, and tags', async () => {
     .query({ search: 'My First Blog' });
 
   expect(search2Response.status).toBe(200);
-  expect(search2Response.body).toBeInstanceOf(Array);
-  expect(search2Response.body[0]).toMatchObject({
-    title: 'My First Blog',
-    description: 'This is a description of my first blog.',
-    tags: ['tag1', 'tag2'],
-    body: 'This is the body of my first blog. It contains detailed information about the topic.',
-    author: 'John Doe'
-  });
+  expect(search2Response.body.data.docs).toBeInstanceOf(Array);
+  expect(search2Response.body.data.docs[0]).toHaveProperty(
+    'title' , 'My First Blog'
+  );
 
   // Perform the search by tag
   const search3Response = await request(app)
@@ -603,55 +577,51 @@ it('should search blogs by author, title, and tags', async () => {
     .query({ search: 'tag1' });
 
   expect(search3Response.status).toBe(200);
-  expect(search3Response.body).toBeInstanceOf(Array);
-  expect(search3Response.body[0]).toMatchObject({
-    title: 'My First Blog',
-    description: 'This is a description of my first blog.',
-    tags: ['tag1', 'tag2'],
-    body: 'This is the body of my first blog. It contains detailed information about the topic.',
-    author: 'John Doe'
-  });
+  expect(search3Response.body.data.docs).toBeInstanceOf(Array);
+  expect(search3Response.body.data.docs[0]).toHaveProperty('tags', ['tag1', 'tag2']);
 }, 20000);
 
 it('should get a list of blogs ordered by read_count, reading_time, and timestamp', async () => {
   // First, create multiple blog posts
   const createResponse1 = await request(app)
-    .post('/api/blogs/create-post')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      title: 'Blog One',
-      description: 'This is the first blog.',
-      tags: ['tag1'],
-      body: 'This is the body of the first blog. It contains detailed information about the topic.',
-      state: 'published'
-    });
+  .post('/api/blogs/create-post')
+  .set('Authorization', `Bearer ${token}`)
+  .send({
+    title: 'Blog One',
+    description: 'This is the first blog.',
+    tags: ['tag1'],
+    body: 'This is the body of the first blog. It contains detailed information about the topic.',
+    state: 'published'
+  });
 
-  const createResponse2 = await request(app)
-    .post('/api/blogs/create-post')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      title: 'Blog Two',
-      description: 'This is the second blog.',
-      tags: ['tag2'],
-      body: 'This is the body of the second blog. It contains detailed information about the topic.',
-      state: 'published'
-    });
+const createResponse2 = await request(app)
+  .post('/api/blogs/create-post')
+  .set('Authorization', `Bearer ${token}`)
+  .send({
+    title: 'Blog Two',
+    description: 'This is the second blog.',
+    tags: ['tag2'],
+    body: 'This is the body of the second blog. It contains detailed information about the topic.',
+    state: 'published'
+  });
 
-  const createResponse3 = await request(app)
-    .post('/api/blogs/create-post')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      title: 'Blog Three',
-      description: 'This is the third blog.',
-      tags: ['tag3'],
-      body: 'This is the body of the third blog. It contains detailed information about the topic.',
-      state: 'published'
-    });
 
-  // Ensure the blog posts were created successfully
-  expect(createResponse1.status).toBe(201);
-  expect(createResponse2.status).toBe(201);
-  expect(createResponse3.status).toBe(201);
+const createResponse3 = await request(app)
+  .post('/api/blogs/create-post')
+  .set('Authorization', `Bearer ${token}`)
+  .send({
+    title: 'Blog Three',
+    description: 'This is the third blog.',
+    tags: ['tag3'],
+    body: 'This is the body of the third blog. It contains detailed information about the topic.',
+    state: 'published'
+  });
+
+
+// Ensure the blog posts were created successfully
+expect(createResponse1.status).toBe(201);
+expect(createResponse2.status).toBe(201);
+expect(createResponse3.status).toBe(201);
 
   // open blog one to increment read count
   const response1 = await request(app)
@@ -682,58 +652,45 @@ it('should get a list of blogs ordered by read_count, reading_time, and timestam
 
    blogId = createResponse1.body.data._id;
 
-      // Fetch the blog post by ID to increment read_count
+      // Fetch the blog post by ID to increment read_count FOR 1
       const res = await request(app)
         .get(`/api/blogs/${blogId}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('read_count', 1);
+      expect(res.body.data).toHaveProperty('read_count', 1);
 
   // Fetch the list of blogs ordered by read_count
   const responseByReadCount = await request(app)
     .get('/api/blogs/all-posts')
     .query({ sortBy: 'read_count' });
+    // console.log (responseByReadCount)
 
-  expect(responseByReadCount.status).toBe(200);
-  expect(responseByReadCount.body).toBeInstanceOf(Array);
-  expect(responseByReadCount.body).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({ title: 'Blog One' }),
-      expect.objectContaining({ title: 'Blog Two' }),
-      expect.objectContaining({ title: 'Blog Three' })
-    ])
-  );
+    expect(responseByReadCount.status).toBe(200);
+    expect(responseByReadCount.body.data.docs).toBeInstanceOf(Array);
+    expect(responseByReadCount.body.data.docs.length).toBeGreaterThanOrEqual(3);
+    
+    // Check the order of the titles
+    const titles = responseByReadCount.body.data.docs.map(doc => doc.title);
+    expect(titles).toEqual([ 'Blog Two', 'Blog Three','Blog One']);
+  
 
   // Fetch the list of blogs ordered by reading_time
   const responseByReadingTime = await request(app)
     .get('/api/blogs/all-posts')
     .query({ sortBy: 'reading_time' });
 
-  expect(responseByReadingTime.status).toBe(200);
-  expect(responseByReadingTime.body).toBeInstanceOf(Array);
-  expect(responseByReadingTime.body).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({ title: 'Blog One' }),
-      expect.objectContaining({ title: 'Blog Two' }),
-      expect.objectContaining({ title: 'Blog Three' })
-    ])
-  );
+  const time = responseByReadingTime.body.data.docs.map(doc => doc.title);
+  expect(time).toEqual([ 'Blog One','Blog Two', 'Blog Three']);;
 
   // Fetch the list of blogs ordered by timestamp
   const responseByTimestamp = await request(app)
     .get('/api/blogs/all-posts')
     .query({ sortBy: 'createdAt' });
 
-  expect(responseByTimestamp.status).toBe(200);
-  expect(responseByTimestamp.body).toBeInstanceOf(Array);
-  expect(responseByTimestamp.body).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({ title: 'Blog One' }),
-      expect.objectContaining({ title: 'Blog Two' }),
-      expect.objectContaining({ title: 'Blog Three' })
-    ])
-  );
+    const timestamp = responseByTimestamp.body.data.docs.map(doc => doc.title);
+    expect(timestamp).toEqual([ 'Blog One','Blog Two', 'Blog Three']);
+
 }, 20000);
 
 

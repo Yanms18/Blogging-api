@@ -14,7 +14,8 @@ const connectToDb = async () => {
 
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 60000, // Increase server selection timeout to 60 seconds
     });
 
     console.log('Connected to MongoDB successfully');
