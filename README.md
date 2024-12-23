@@ -183,54 +183,6 @@ calculateReadingTime.js
   }
   ```
 
-### Users
-
-- **Get User Details**
-
-  ```http
-  GET /api/users/:id
-  ```
-
-- **Create User**
-
-  ```http
-  POST /api/users
-  ```
-
-  Request Body:
-
-  ```json
-  {
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com",
-    "password": "password123"
-  }
-  ```
-
-- **Update User**
-
-  ```http
-  PUT /api/users/:id
-  ```
-
-  Request Body:
-
-  ```json
-  {
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com",
-    "password": "newpassword123"
-  }
-  ```
-
-- **Delete User**
-
-  ```http
-  DELETE /api/users/:id
-  ```
-
 ### Blogs
 
 - **Create Blog**
